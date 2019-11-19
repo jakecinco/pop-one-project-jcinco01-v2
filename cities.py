@@ -1,31 +1,37 @@
 def read_cities(file_name):
-    """
-    Read in the cities from the given `file_name`, and return 
-    them as a list of four-tuples: 
+    with open(file_name, "r") as file:
+        lines = file.read().splitlines()
+        cities = [tuple(line.split("\t")) for line in lines]
+        return cities
 
-      [(state, city, latitude, longitude), ...] 
 
-    Use this as your initial `road_map`, that is, the cycle 
+#road_map = read_cities(file_name)
 
-      Alabama -> Alaska -> Arizona -> ... -> Wyoming -> Alabama.
-    """
-    pass
-  
+
+def convert(N):  # Print only one or two digits after the decimal point
+    return float("{0:.2f}".format(float(N)))
+
+
 def print_cities(road_map):
-    """
-    Prints a list of cities, along with their locations. 
-    Print only one or two digits after the decimal point.
-    """
-    pass
+    #road_map = read_cities(road_map)
+    print([(city[1], convert(city[2]), convert(city[3])) for city in road_map])
+
 
 def compute_total_distance(road_map):
-    """
-    Returns, as a floating point number, the sum of the distances of all 
-    the connections in the `road_map`. Remember that it's a cycle, so that 
-    (for example) in the initial `road_map`, Wyoming connects to Alabama...
-    """
-    return None if not road_map else road_map + road_map  # For tests 1 & 2
-
+    if not road_map:
+        return None
+    else:
+        # road_map = read_cities(road_map)
+        road_map.append(road_map[0])
+        road_map = [(city[1], convert(city[2]), convert(city[3])) for city in road_map]
+        total_distance = 0.0
+        from math import sqrt
+        for i in range(len(road_map) - 1):
+            lats = road_map[i][1] - road_map[i + 1][1]
+            longs = road_map[i][2] - road_map[i + 1][2]
+            distance = sqrt(lats ** 2 + longs ** 2)
+            total_distance += distance
+    return total_distance
 
 
 def swap_cities(road_map, index1, index2):
@@ -39,8 +45,13 @@ def swap_cities(road_map, index1, index2):
     Allow for the possibility that `index1=index2`,
     and handle this case correctly.
     """
-    if index1 == index2:
-        return road_map  # For test 3
+    #new_road_map = read_cities(road_map)
+    road_map[index1], road_map[index2] = road_map[index2], road_map[index1]
+    new_total_distance = compute_total_distance(road_map)
+    #add error handling here (if index1=index2)
+    return road_map, new_total_distance
+
+
 
 def shift_cities(road_map):
     """
@@ -61,6 +72,7 @@ def find_best_cycle(road_map):
     """
     pass
 
+
 def print_map(road_map):
     """
     Prints, in an easily understandable format, the cities and 
@@ -69,6 +81,7 @@ def print_map(road_map):
     """
     pass
 
+
 def main():
     """
     Reads in, and prints out, the city data, then creates the "best"
@@ -76,5 +89,6 @@ def main():
     """
     pass
 
-if __name__ == "__main__": #keep this in
+
+if __name__ == "__main__":  # keep this in
     main()
