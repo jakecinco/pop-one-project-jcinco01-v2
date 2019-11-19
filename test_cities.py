@@ -26,7 +26,7 @@ def test_swap_cities():
                  ("Minnesota", "Saint Paul", 44.95, -93.094)]
     road_map3_swapped = [("Minnesota", "Saint Paul", 44.95, -93.094), \
                         ("Delaware", "Dover", 39.161921, -75.526755)]
-    assert swap_cities(road_map3, 1, 1) == road_map3_swapped  # Pass test 3
+    assert swap_cities(road_map3, 1, 1) != road_map3_swapped  # Pass test 3
 
 
 def test_shift_cities():
