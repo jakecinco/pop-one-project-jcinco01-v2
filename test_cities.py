@@ -13,12 +13,12 @@ def test_compute_total_distance():
 
 def test_compute_total_distance2():
     road_map1 = [1, 2, 3, 4]
-    assert compute_total_distance(road_map1) == road_map1  # Fail test 1: should be list1 + list2
+    assert compute_total_distance(road_map1) == road_map1 + road_map1  # Pass test 1
 
 
 def test_compute_total_distance3():
     road_map2 = [1, 2, 3, 4]
-    assert compute_total_distance(road_map2) is None  # Fail test 2: should not be None
+    assert compute_total_distance(road_map2) is not None  # Pass test 2
 
 
 def test_swap_cities():
@@ -26,9 +26,9 @@ def test_swap_cities():
                  ("Minnesota", "Saint Paul", 44.95, -93.094)]
     road_map3_swapped = [("Minnesota", "Saint Paul", 44.95, -93.094), \
                         ("Delaware", "Dover", 39.161921, -75.526755)]
-    assert swap_cities(road_map3, 1, 1) == road_map3_swapped  # Fail test 3: should not be equal
+    assert swap_cities(road_map3, 1, 1) != road_map3_swapped  # Pass test 3
 
 
 def test_shift_cities():
     road_map4 = [1, 2, 3, 4]
-    assert shift_cities(road_map4) == 2  # Fail test 4: should return 1st value in list
+    assert shift_cities(road_map4) == 1  # Pass test 4
