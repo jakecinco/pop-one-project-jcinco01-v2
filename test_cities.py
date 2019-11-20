@@ -15,7 +15,7 @@ def test_compute_total_distance():
 
 
 def test_compute_total_distance_is_empty():
-    assert compute_total_distance(None) is None  # Pass test 2
+    assert compute_total_distance(None) is None
 
 
 def test_swap_cities():
@@ -23,11 +23,20 @@ def test_swap_cities():
                  ("Minnesota", "Saint Paul", 44.95, -93.094)]
     road_map3_swapped = [("Minnesota", "Saint Paul", 44.95, -93.094),
                          ("Delaware", "Dover", 39.161921, -75.526755)]
+    road_map4 = [("Kentucky", "Frankfort", 38.197274, -84.86311),
+                 ("Delaware", "Dover", 39.161921, -75.526755),
+                 ("Minnesota", "Saint Paul", 44.95, -93.094)]
+    road_map4_swapped = [("Minnesota", "Saint Paul", 44.95, -93.094),
+                    ("Delaware", "Dover", 39.161921, -75.526755),
+                    ("Kentucky", "Frankfort", 38.197274, -84.86311)]
     assert swap_cities(road_map3, 0, 1) == (road_map3_swapped, compute_total_distance(road_map3_swapped))
-    assert swap_cities(road_map3, 1, 3) is IndexError
-    assert swap_cities(road_map3, 1, 1) is False
+    assert swap_cities(road_map4, 0, 2) == (road_map4_swapped, compute_total_distance(road_map4_swapped))
+    assert swap_cities(road_map3, 1, 3) is None
+    assert swap_cities(road_map3, 1, 1) is None
 
 
 def test_shift_cities():
-    road_map4 = [1, 2, 3, 4]
-    assert shift_cities(road_map4) == 1  # Pass test 4
+    road_map5 = [1, 2, 3, 4]
+    assert shift_cities(road_map5) == road_map5[-1]
+    assert shift_cities([5, 6]) == 6
+

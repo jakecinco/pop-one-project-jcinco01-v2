@@ -35,21 +35,17 @@ def compute_total_distance(road_map):
 
 
 def swap_cities(road_map, index1, index2):
-    """
-    Take the city at location `index` in the `road_map`, and the 
-    city at location `index2`, swap their positions in the `road_map`, 
-    compute the new total distance, and return the tuple 
-
-        (new_road_map, new_total_distance)
-
-    Allow for the possibility that `index1=index2`,
-    and handle this case correctly.
-    """
-    #new_road_map = read_cities(road_map)
-    road_map[index1], road_map[index2] = road_map[index2], road_map[index1]
-    new_total_distance = compute_total_distance(road_map)
-    #add error handling here (if index1=index2)
-    return road_map, new_total_distance
+    try:
+        if index1 == index2:
+            print("index1 and index2 are the same!")
+        else:
+            #new_road_map = read_cities(road_map)
+            road_map[index1], road_map[index2] = road_map[index2], road_map[index1]
+            new_total_distance = compute_total_distance(road_map)
+            #add error handling here (if index1=index2)
+            return road_map, new_total_distance
+    except IndexError or None:
+        print("Index out of range")
 
 
 
@@ -59,8 +55,8 @@ def shift_cities(road_map):
     to the position i+1. The city at the last position moves to the position
     0. Return the new road map. 
     """
-    city1 = road_map[0]
-    return city1 == road_map[0]  # For test 4
+    first_city_in_new_road_map = road_map[-1]
+    return first_city_in_new_road_map
 
 
 def find_best_cycle(road_map):
