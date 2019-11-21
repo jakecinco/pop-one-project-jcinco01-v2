@@ -1,4 +1,7 @@
-import random, copy, math, os
+import copy
+import math
+import random
+import os.path
 
 
 def read_cities(file_name):
@@ -26,14 +29,14 @@ def compute_total_distance(road_map):
     else:
         road_map_copy = copy.deepcopy(road_map)
         road_map_copy.append(road_map[0])
-        road_map_copy = [(city[1], convert(city[2]), convert(city[3])) for city in road_map_copy]
+        # road_map_copy = [(city[1], convert(city[2]), convert(city[3])) for city in road_map_copy]
         total_distance = 0.0
         for i in range(len(road_map_copy) - 1):
-            lats = road_map_copy[i][1] - road_map_copy[i + 1][1]
-            longs = road_map_copy[i][2] - road_map_copy[i + 1][2]
+            lats = float(road_map_copy[i][2]) - float(road_map_copy[i + 1][2])
+            longs = float(road_map_copy[i][3]) - float(road_map_copy[i + 1][3])
             distance = math.sqrt(lats ** 2 + longs ** 2)
             total_distance += distance
-    return total_distance
+    return convert(total_distance)
 
 
 def swap_cities(road_map, index1, index2):
@@ -51,17 +54,18 @@ def swap_cities(road_map, index1, index2):
 def shift_cities(road_map):
     new_road_map = [road_map[-1]]
     new_road_map.extend(road_map[:-1])
-    road_map = new_road_map
-    return road_map
+    return new_road_map
 
 
 def find_best_cycle(road_map):
-    best_cycle = compute_total_distance(road_map)
+    best_cycle_total = compute_total_distance(road_map)
+    best_cycle = ()
     for i in range(10000):
         road_map = shift_cities(road_map)
-        swapped = swap_cities(road_map, random.randint(0, len(road_map))-1, random.randint(0, len(road_map)-1))
-        if swapped[1] < best_cycle:
-            best_cycle = swapped[1]
+        best_found = swap_cities(road_map, random.randint(0, len(road_map))-1, random.randint(0, len(road_map)-1))
+        if best_found[1] < best_cycle_total:
+            best_cycle_total = best_found[1]
+            best_cycle = best_found
     return best_cycle
 
 
@@ -71,23 +75,19 @@ def print_map(road_map):
     for i in range(len(road_map) - 1):
         cityA = road_map[i]
         cityB = road_map[i + 1]
-        # lats = road_map[i][2] - road_map[i+1][2]
-        # longs = road_map[i][3] - road_map[i+1][3]
-        # distance = math.sqrt(lats**2 + longs**2)
-        distance = math.sqrt((convert(cityA[2]) - convert(cityB[2])) ** 2 + (convert(cityA[3]) - convert(cityB[3])) ** 2)
-        print(f"{cityA[1]} ----> {cityB[1]} ===== {distance}")
-    print(find_best_cycle(road_map))
+        distance = math.sqrt((float(cityA[2]) - float(cityB[2])) ** 2 + (float(cityA[3]) - float(cityB[3])) ** 2)
+        print(f"{cityA[1]} -----> {cityB[1]} ===== {convert(distance)}")
+    print(f"Total distance: {convert(compute_total_distance(road_map))}")
 
 
 def main():
-    """
-    Reads in, and prints out, the city data, then creates the "best"
-    cycle and prints it out.
-    """
-    s = input()
-    print_cities(s)
-    print_map(s)
-    print(compute_total_distance(read_cities(s)))
+    file = input()  # Code file input validation here - make sure the file exists and valid
+    if os.path.isfile(file) is True:
+        print_cities(file)
+        print_map(file)
+        print(find_best_cycle(read_cities(file)))
+    else:
+        print("Input file does not exist")
 
 
 if __name__ == "__main__":  # keep this in

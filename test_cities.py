@@ -2,12 +2,6 @@ import pytest
 from cities import *
 
 
-road_map2 = [('Nebraska', 'Lincoln', 40.809868, -96.675345),
-                 ('Nevada', 'Carson City', 39.160949, -119.753877),
-                 ('New Hampshire', 'Concord', 43.220093, -71.549127),
-                 ('New Jersey', 'Trenton', 40.221741, -74.756138)]
-
-
 def test_compute_total_distance():
     road_map1 = [("Kentucky", "Frankfort", 38.197274, -84.86311),
                  ("Delaware", "Dover", 39.161921, -75.526755),
@@ -38,7 +32,6 @@ def test_swap_cities():
     assert swap_cities(road_map3, 0, 1) == (road_map3_swapped, compute_total_distance(road_map3_swapped))
     assert swap_cities(road_map4, 0, 2) == (road_map4_swapped, compute_total_distance(road_map4_swapped))
     assert swap_cities(road_map3, 1, 3) is None
-    # assert swap_cities(road_map3, 1, 1) is None
 
 
 def test_shift_cities():
@@ -51,6 +44,3 @@ def test_shift_cities():
                                        ("Kentucky", "Frankfort", 38.197274, -84.86311),
                                        ("Delaware", "Dover", 39.161921, -75.526755)]
 
-
-# def test_find_best_cycle():
-#     assert find_best_cycle(road_map2) == (road_map2, compute_total_distance(road_map2))
