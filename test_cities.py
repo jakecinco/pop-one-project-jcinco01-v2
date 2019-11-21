@@ -38,7 +38,7 @@ def test_swap_cities():
     assert swap_cities(road_map3, 0, 1) == (road_map3_swapped, compute_total_distance(road_map3_swapped))
     assert swap_cities(road_map4, 0, 2) == (road_map4_swapped, compute_total_distance(road_map4_swapped))
     assert swap_cities(road_map3, 1, 3) is None
-    assert swap_cities(road_map3, 1, 1) is None
+    # assert swap_cities(road_map3, 1, 1) is None
 
 
 def test_shift_cities():
