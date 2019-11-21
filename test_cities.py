@@ -2,6 +2,12 @@ import pytest
 from cities import *
 
 
+road_map2 = [('Nebraska', 'Lincoln', 40.809868, -96.675345),
+                 ('Nevada', 'Carson City', 39.160949, -119.753877),
+                 ('New Hampshire', 'Concord', 43.220093, -71.549127),
+                 ('New Jersey', 'Trenton', 40.221741, -74.756138)]
+
+
 def test_compute_total_distance():
     road_map1 = [("Kentucky", "Frankfort", 38.197274, -84.86311),
                  ("Delaware", "Dover", 39.161921, -75.526755),
@@ -27,8 +33,8 @@ def test_swap_cities():
                  ("Delaware", "Dover", 39.161921, -75.526755),
                  ("Minnesota", "Saint Paul", 44.95, -93.094)]
     road_map4_swapped = [("Minnesota", "Saint Paul", 44.95, -93.094),
-                    ("Delaware", "Dover", 39.161921, -75.526755),
-                    ("Kentucky", "Frankfort", 38.197274, -84.86311)]
+                         ("Delaware", "Dover", 39.161921, -75.526755),
+                         ("Kentucky", "Frankfort", 38.197274, -84.86311)]
     assert swap_cities(road_map3, 0, 1) == (road_map3_swapped, compute_total_distance(road_map3_swapped))
     assert swap_cities(road_map4, 0, 2) == (road_map4_swapped, compute_total_distance(road_map4_swapped))
     assert swap_cities(road_map3, 1, 3) is None
@@ -36,7 +42,15 @@ def test_swap_cities():
 
 
 def test_shift_cities():
-    road_map5 = [1, 2, 3, 4]
-    assert shift_cities(road_map5) == road_map5[-1]
-    assert shift_cities([5, 6]) == 6
+    road_map5 = [('a', 1), ('b', 2), ('c', 3), ('d', 4)]
+    road_map6 = [("Kentucky", "Frankfort", 38.197274, -84.86311),
+                 ("Delaware", "Dover", 39.161921, -75.526755),
+                 ("Minnesota", "Saint Paul", 44.95, -93.094)]
+    assert shift_cities(road_map5) == [('d', 4), ('a', 1), ('b', 2), ('c', 3)]
+    assert shift_cities(road_map6) == [("Minnesota", "Saint Paul", 44.95, -93.094),
+                                       ("Kentucky", "Frankfort", 38.197274, -84.86311),
+                                       ("Delaware", "Dover", 39.161921, -75.526755)]
 
+
+# def test_find_best_cycle():
+#     assert find_best_cycle(road_map2) == (road_map2, compute_total_distance(road_map2))
