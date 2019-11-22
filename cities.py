@@ -11,7 +11,7 @@ def read_cities(file_name):
         return cities
 
 
-def convert(num):  # Print only one or two digits after the decimal point
+def convert(num):  # Convert string to 2-decimal place float
     return float("{0:.2f}".format(float(num)))
 
 
@@ -61,11 +61,11 @@ def find_best_cycle(road_map):
     best_cycle_total = compute_total_distance(road_map)
     best_cycle = ()
     for i in range(10000):
-        road_map = shift_cities(road_map)
-        best_found = swap_cities(road_map, random.randint(0, len(road_map))-1, random.randint(0, len(road_map)-1))
-        if best_found[1] < best_cycle_total:
-            best_cycle_total = best_found[1]
-            best_cycle = best_found
+        shift_cities(road_map)
+        swapped = swap_cities(road_map, random.randint(0, len(road_map))-1, random.randint(0, len(road_map)-1))
+        if swapped[1] < best_cycle_total:
+            best_cycle_total = swapped[1]
+            best_cycle = swapped
     return best_cycle
 
 
@@ -80,14 +80,27 @@ def print_map(road_map):
     print(f"Total distance: {convert(compute_total_distance(road_map))}")
 
 
+def draw_map(road_map):
+    lats = [convert(city[2]) for city in road_map]
+    longs = [convert(city[3])for city in road_map]
+    min_lats = min(lats)
+    max_lats = max(lats)
+    min_longs = min(longs)
+    max_longs = max(longs)
+    coor = int(min_lats), int(max_lats), int(min_longs), int(max_longs)
+    for x in range(coor[2], coor[3]):
+        print(x, end=" ")
+
+
 def main():
-    file = input()  # Code file input validation here - make sure the file exists and valid
-    if os.path.isfile(file) is True:
+    file = input()
+    if os.path.isfile(file):
         print_cities(file)
         print_map(file)
         print(find_best_cycle(read_cities(file)))
+        print(draw_map(read_cities(file)))
     else:
-        print("Input file does not exist")
+        print("Input file does not exist. Enter correct file name.")
 
 
 if __name__ == "__main__":  # keep this in

@@ -44,3 +44,9 @@ def test_shift_cities():
                                        ("Kentucky", "Frankfort", 38.197274, -84.86311),
                                        ("Delaware", "Dover", 39.161921, -75.526755)]
 
+
+def test_convert():
+    assert convert('39.161921') == 39.16
+    assert convert('31.1') == 31.1
+    assert convert('Delaware') == ValueError
+
