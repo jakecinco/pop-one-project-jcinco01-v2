@@ -48,5 +48,8 @@ def test_shift_cities():
 def test_convert():
     assert convert('39.161921') == 39.16
     assert convert('31.1') == 31.1
-    assert convert('Delaware') == ValueError
-
+    assert convert('20') == 20.0
+    assert convert('-90') == -90.0
+    assert convert(78) == 78.0
+    assert convert(53.123412) == 53.12
+    assert convert('Delaware') is None
