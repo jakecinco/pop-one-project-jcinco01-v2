@@ -30,25 +30,26 @@ def compute_total_distance(road_map):
     if not road_map:
         return None
     else:
-        road_map_copy = copy.deepcopy(road_map)
-        road_map_copy.append(road_map[0])
-        # road_map_copy = [(city[1], convert(city[2]), convert(city[3])) for city in road_map_copy]
+        map_copy = [*road_map]
+        map_copy.append(road_map[0])
         total_distance = 0.0
-        for i in range(len(road_map_copy) - 1):
-            lats = float(road_map_copy[i][2]) - float(road_map_copy[i + 1][2])
-            longs = float(road_map_copy[i][3]) - float(road_map_copy[i + 1][3])
+        for i in range(len(map_copy) - 1):
+            lats = float(map_copy[i][2]) - float(map_copy[i + 1][2])
+            longs = float(map_copy[i][3]) - float(map_copy[i + 1][3])
             distance = math.sqrt(lats * lats + longs * longs)
             total_distance += distance
-    return convert(total_distance)
+    return total_distance
 
 
 def swap_cities(road_map, index1, index2):
     try:
+        map_copy = road_map[:]
         while index1 == index2:
-            index1 = random.randint(0, len(road_map) - 1)
-        road_map[index1], road_map[index2] = road_map[index2], road_map[index1]
-        new_total_distance = compute_total_distance(road_map)
-        return road_map, new_total_distance
+            index1 = random.randint(0, len(map_copy) - 1)
+            index2 = random.randint(0, len(map_copy) - 1)
+        map_copy[index1], map_copy[index2] = map_copy[index2], map_copy[index1]
+        new_total_distance = compute_total_distance(map_copy)
+        return map_copy, new_total_distance
     except IndexError or None:
         print("Index out of range")
 
@@ -61,20 +62,20 @@ def shift_cities(road_map):
 
 def find_best_cycle(road_map):
     best_cycle_total = compute_total_distance(road_map)
-    best_cycle = ()
+    best_cycle = [*road_map]
     for i in range(10000):
-        rand_index1 = random.randint(0, len(road_map) - 1)
-        rand_index2 = random.randint(0, len(road_map) - 1)
-        shift_cities(road_map)
-        swapped = swap_cities(road_map, rand_index1, rand_index2)
-        if swapped[1] < best_cycle_total:
-            best_cycle_total = swapped[1]
-            best_cycle = swapped
-    return best_cycle
+        index1 = random.randint(0, len(road_map) - 1)
+        index2 = random.randint(0, len(road_map) - 1)
+        best_cycle = shift_cities(best_cycle)
+        new_road_map, new_total_distance = swap_cities(best_cycle, index1, index2)
+        if new_total_distance < best_cycle_total:
+            best_cycle_total = new_total_distance
+            best_cycle = new_road_map
+    return best_cycle, best_cycle_total
 
 
 def print_map(road_map):
-    road_map = read_cities(road_map)
+    # road_map = read_cities(road_map)
     road_map.append(road_map[0])
     for i in range(len(road_map) - 1):
         cityA = road_map[i]
@@ -127,30 +128,30 @@ def draw_map(road_map):
 #         print(end="\n")
 
 
-def convert_coordinates(best_cycle):
-    best_cycle_map = best_cycle[0]
-    lats = [int(float(city[2])) for city in best_cycle_map]
-    longs = [int(float(city[3])) for city in best_cycle_map]
-    min_lats = min(lats)
-    max_lats = max(lats)
-    min_longs = min(longs)
-    max_longs = max(longs)
+# def convert_coordinates(best_cycle):
+#     best_cycle_map = best_cycle[0]
+#     lats = [int(float(city[2])) for city in best_cycle_map]
+#     longs = [int(float(city[3])) for city in best_cycle_map]
+#     min_lats = min(lats)
+#     max_lats = max(lats)
+#     min_longs = min(longs)
+#     max_longs = max(longs)
 
-    latitudes = []
-    for i in range(max_lats, min_lats - 1, -1):
-        latitudes.append(i)
-    longitudes = []
-    for j in range(min_longs, max_longs + 1, 1):
-        longitudes.append(j)
+#     latitudes = []
+#     for i in range(max_lats, min_lats - 1, -1):
+#         latitudes.append(i)
+#     longitudes = []
+#     for j in range(min_longs, max_longs + 1, 1):
+#         longitudes.append(j)
 
-    def lat_to_x(lat):
-        return latitudes.index(int(float(lat)))
+#     def lat_to_x(lat):
+#         return latitudes.index(int(float(lat)))
 
-    def long_to_y(long):
-        return longitudes.index(int(float(long)))
+#     def long_to_y(long):
+#         return longitudes.index(int(float(long)))
 
-    new_map = [(state, city, lat_to_x(lat), long_to_y(long)) for (state, city, lat, long) in best_cycle_map]
-    return new_map
+#     new_map = [(state, city, lat_to_x(lat), long_to_y(long)) for (state, city, lat, long) in best_cycle_map]
+#     return new_map
 
 
 # def visualise():
@@ -159,10 +160,10 @@ def main():
     file = input()
     if os.path.isfile(file):
         print_cities(file)
-        print_map(file)
+        print_map(read_cities(file))
         print(find_best_cycle(read_cities(file)))
-        print(convert_coordinates(find_best_cycle(read_cities(file))))
-        draw_map(read_cities(file))
+        # print(convert_coordinates(find_best_cycle(read_cities(file))))
+        # draw_map(read_cities(file))
     else:
         print("Input file does not exist. Enter correct file name.")
 

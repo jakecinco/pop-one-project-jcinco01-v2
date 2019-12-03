@@ -148,13 +148,17 @@ def linemaker(screen_points):
 
 converted_map = convert_coordinates(best_cycle)
 
-map_coords = [(x*16, y*9) for (a, b, x, y) in converted_map]  # linemaker accepts list of tuples(x,y)
+map_coords = [(x, y) for (a, b, x, y) in converted_map]  # linemaker accepts list of tuples(x,y)
 
 for (x0, y0, x1, y1) in linemaker(map_coords):
     canvas.create_line([[x0, y0], [x1, y1]], width=1, arrow="last", activefill="red", tags=(x0, y0))
 
 # distance = tk.Message(window, text=f"Best total distance: {road_map[1]}", width=20)
 # distance.pack()
+
+# for (state, city, x, y) in converted_map:
+#     canvas.create_text([x*9, y*9], text=state)
+
 
 window.mainloop()
 
