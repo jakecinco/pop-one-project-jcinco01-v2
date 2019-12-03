@@ -38,7 +38,7 @@ def compute_total_distance(road_map):
             longs = float(map_copy[i][3]) - float(map_copy[i + 1][3])
             distance = math.sqrt(lats * lats + longs * longs)
             total_distance += distance
-    return total_distance
+    return convert(total_distance)
 
 
 def swap_cities(road_map, index1, index2):
@@ -71,39 +71,48 @@ def find_best_cycle(road_map):
         if new_total_distance < best_cycle_total:
             best_cycle_total = new_total_distance
             best_cycle = new_road_map
-    return best_cycle, best_cycle_total
+    return best_cycle
 
 
 def print_map(road_map):
-    # road_map = read_cities(road_map)
-    road_map.append(road_map[0])
-    for i in range(len(road_map) - 1):
-        cityA = road_map[i]
-        cityB = road_map[i + 1]
+    map_copy = road_map[:]
+    map_copy.append(road_map[0])
+    for i in range(len(map_copy) - 1):
+        cityA = map_copy[i]
+        cityB = map_copy[i + 1]
         distance = math.sqrt((float(cityA[2]) - float(cityB[2])) ** 2 + (float(cityA[3]) - float(cityB[3])) ** 2)
         print(f"{cityA[0]} -----> {cityB[0]} ===== {convert(distance)}")
-    print(f"Total distance: {convert(compute_total_distance(road_map))}")
+    print(f"Total distance: {convert(compute_total_distance(map_copy))}")
 
 
-def draw_map(road_map):
-    lats = [convert(city[2]) for city in road_map]
-    longs = [convert(city[3]) for city in road_map]
+def visualise(road_map):
+    lats = [int(float(city[2])) for city in road_map]
+    longs = [int(float(city[3]))for city in road_map]
+    cities = [(city[0], int(float(city[2])), int(float(city[3]))) for city in road_map]
     min_lats = min(lats)
     max_lats = max(lats)
     min_longs = min(longs)
     max_longs = max(longs)
-    coor = int(min_lats), int(max_lats), int(min_longs), int(max_longs)
-    for x in range(coor[2], coor[3] + 1, 5):
-        print("\t" + str(x), end="")
-    print(end="\n")
-    for y in range(coor[1], coor[0] + 1, -5):
-        for i in range(0, abs(coor[2]) - abs(coor[3]), 5):
-            print("\t" + " | ", end="")
-        print(end="\n")
-        print(y, end="")
-        for j in range(0, abs(coor[2]) - abs(coor[3]), 5):
-            print("    " + "-" + "\t", end="")
-        print(end="\n")
+    coor = min_lats, max_lats, min_longs, max_longs
+    for x in range(len(road_map)-1):
+        for i in range(min_longs, max_longs + 1):
+            if i == cities[x][2]:
+                for j in range(max_lats, min_lats + 1, -1):
+                    if cities[x][1] == j:
+                        print(cities.index(cities[x])+1, end="")
+                    else:
+                        print("   ", end="")
+                    print(" | ",end="")
+            else:
+                print("  -  ", end="")
+        print("\n")
+
+
+    # lats_list = sorted(lats)
+    # longs_list = sorted(longs)
+    # print(lats_list)
+    # print(longs_list)
+    print(cities)
 
 
 # def draw_map(road_map):
@@ -157,15 +166,19 @@ def draw_map(road_map):
 # def visualise():
 
 def main():
+    print("Type file name: ", end="")
     file = input()
     if os.path.isfile(file):
+        print("Initial road map")
         print_cities(file)
+        print("\n""Initial road map connections")
         print_map(read_cities(file))
-        print(find_best_cycle(read_cities(file)))
-        # print(convert_coordinates(find_best_cycle(read_cities(file))))
-        # draw_map(read_cities(file))
+        print("\n""Best cycle")
+        best_cycle = find_best_cycle(read_cities(file))
+        print(f"{best_cycle} \nBest total distance: {compute_total_distance(best_cycle)}")
+        print(visualise(best_cycle))
     else:
-        print("Input file does not exist. Enter correct file name.")
+        print("Input file does not exist. Enter correct file name and ensure it is in the same directory as the project files.")
 
 
 if __name__ == "__main__":  # keep this in

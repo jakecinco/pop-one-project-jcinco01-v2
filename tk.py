@@ -99,7 +99,7 @@ canvas.pack()
 # canvas.create_line(200, 0, 200, 399, dash=(2, 2))  # y-axis
 
 road_map = find_best_cycle(read_cities("city-data.txt"))  # Returns ([(),()], )
-best_cycle = road_map[0]
+best_cycle = road_map[:]
 best_cycle.append(best_cycle[0])
 
 
@@ -148,7 +148,7 @@ def linemaker(screen_points):
 
 converted_map = convert_coordinates(best_cycle)
 
-map_coords = [(x, y) for (a, b, x, y) in converted_map]  # linemaker accepts list of tuples(x,y)
+map_coords = [(x*5, y*5) for (a, b, x, y) in converted_map]  # linemaker accepts list of tuples(x,y)
 
 for (x0, y0, x1, y1) in linemaker(map_coords):
     canvas.create_line([[x0, y0], [x1, y1]], width=1, arrow="last", activefill="red", tags=(x0, y0))
