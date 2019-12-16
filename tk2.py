@@ -11,7 +11,7 @@ window.geometry("%dx%d+0+0" % (width_value, height_value))
 label = tk.Label(window, text="Travelling Salesman", fg="white", bg="black", font=("Courier", 30), padx=10, pady=10)
 label.pack(fill="x")
 
-canvas = window.ca(width=500, height=500)
+canvas = window.ca(width=width_value, height=height_value)
 # canvas.configure(scrollregion=canvas.bbox("ALL"))  # Complete window scroll option
 canvas.pack()
 

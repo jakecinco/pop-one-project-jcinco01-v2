@@ -93,77 +93,35 @@ def visualise(road_map):
     max_lats = max(lats)
     min_longs = min(longs)
     max_longs = max(longs)
-    coor = min_lats, max_lats, min_longs, max_longs
-    for x in range(len(road_map)-1):
+    columns = ""
+    print("    ", end="")
+    for i in range(min_longs, max_longs + 1):
+        if len(str(i)) == 4:
+            print(i, end=" ")
+        elif len(str(i)) == 3:
+            print(i, end="  ")
+        else:
+            print(i, end="  ")
+        columns += "  |  "
+
+    for j in range(max_lats, min_lats - 1, -1):
+        print("\n", "   " + columns, end="")
+        print("\n", j, end="")
         for i in range(min_longs, max_longs + 1):
-            if i == cities[x][2]:
-                for j in range(max_lats, min_lats + 1, -1):
-                    if cities[x][1] == j:
-                        print(cities.index(cities[x])+1, end="")
-                    else:
-                        print("   ", end="")
-                    print(" | ",end="")
+            sym = 0
+            for x in range(len(road_map)):
+                if i == cities[x][2] and j == cities[x][1]:
+                    sym = cities.index(cities[x]) + 1
+            if len(str(i)) == 4 and sym is 0:
+                print(" - ", end=" ")
+            elif len(str(i)) == 3 and sym is 0:
+                print(" - ", end="  ")
+            elif len(str(i)) == 2 and sym is 0:
+                print(" - ", end="   ")
             else:
-                print("  -  ", end="")
-        print("\n")
+                print(f" - {sym}", end="  ")
+    print("\n" + "   ")
 
-
-    # lats_list = sorted(lats)
-    # longs_list = sorted(longs)
-    # print(lats_list)
-    # print(longs_list)
-    print(cities)
-
-
-# def draw_map(road_map):
-#     road_map = convert_coordinates(road_map)
-#     lats = [convert(city[2]) for city in road_map]
-#     longs = [convert(city[3]) for city in road_map]
-#     min_lats = min(lats)
-#     max_lats = max(lats)
-#     min_longs = min(longs)
-#     max_longs = max(longs)
-#     coor = int(min_lats), int(max_lats), int(min_longs), int(max_longs)
-#     for x in range(coor[2], coor[3] + 1, 5):
-#         print("\t" + str(x), end="")
-#     print(end="\n")
-#     for y in range(coor[1], coor[0] + 1, -5):
-#         for i in range(0, abs(coor[2]) - abs(coor[3]), 5):
-#             print("\t" + " | ", end="")
-#         print(end="\n")
-#         print(y, end="")
-#         for j in range(0, abs(coor[2]) - abs(coor[3]), 5):
-#             print("    " + "-" + "\t", end="")
-#         print(end="\n")
-
-
-# def convert_coordinates(best_cycle):
-#     best_cycle_map = best_cycle[0]
-#     lats = [int(float(city[2])) for city in best_cycle_map]
-#     longs = [int(float(city[3])) for city in best_cycle_map]
-#     min_lats = min(lats)
-#     max_lats = max(lats)
-#     min_longs = min(longs)
-#     max_longs = max(longs)
-
-#     latitudes = []
-#     for i in range(max_lats, min_lats - 1, -1):
-#         latitudes.append(i)
-#     longitudes = []
-#     for j in range(min_longs, max_longs + 1, 1):
-#         longitudes.append(j)
-
-#     def lat_to_x(lat):
-#         return latitudes.index(int(float(lat)))
-
-#     def long_to_y(long):
-#         return longitudes.index(int(float(long)))
-
-#     new_map = [(state, city, lat_to_x(lat), long_to_y(long)) for (state, city, lat, long) in best_cycle_map]
-#     return new_map
-
-
-# def visualise():
 
 def main():
     print("Type file name: ", end="")
@@ -176,6 +134,7 @@ def main():
         print("\n""Best cycle")
         best_cycle = find_best_cycle(read_cities(file))
         print(f"{best_cycle} \nBest total distance: {compute_total_distance(best_cycle)}")
+        print("\n")
         print(visualise(best_cycle))
     else:
         print("Input file does not exist. Enter correct file name and ensure it is in the same directory as the project files.")

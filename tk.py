@@ -30,7 +30,7 @@ label.pack(fill="x")
 # tk.Button(window, text="Click Me!", command=say_hi).pack()
 #
 canvas = tk.Canvas(window, width=width_value, height=height_value)
-# canvas.configure(scrollregion=canvas.bbox("ALL"))  # Complete window scroll option
+canvas.configure(scrollregion=canvas.bbox("ALL"))  # Complete window scroll option
 canvas.pack()
 
 
@@ -133,7 +133,7 @@ def linemaker(screen_points):
     # Set up some variables to hold x,y coords
     x0 = y0 = 0
     # Grab each pair of points from the input list
-    for (x, y) in screen_points:
+    for (a, b, x, y) in screen_points:
         # If its the first point in a set, set x0,y0 to the values
         if is_first:
             x0 = x
@@ -141,17 +141,18 @@ def linemaker(screen_points):
             is_first = False
         else:
             # If its not the fist point yeild previous pair and current pair
-            yield x0, y0, x, y
+            yield x0, y0, x, y, a, b
             # Set current x,y to start coords of next line
             x0, y0 = x, y
 
 
 converted_map = convert_coordinates(best_cycle)
 
-map_coords = [(x*5, y*5) for (a, b, x, y) in converted_map]  # linemaker accepts list of tuples(x,y)
+map_coords = [(a, b, x*20, y*9) for (a, b, x, y) in converted_map]  # linemaker accepts list of tuples(x,y)
 
-for (x0, y0, x1, y1) in linemaker(map_coords):
+for (x0, y0, x1, y1, a, b) in linemaker(map_coords):
     canvas.create_line([[x0, y0], [x1, y1]], width=1, arrow="last", activefill="red", tags=(x0, y0))
+    canvas.create_text(x0, y0, text=f"{a}")
 
 # distance = tk.Message(window, text=f"Best total distance: {road_map[1]}", width=20)
 # distance.pack()
