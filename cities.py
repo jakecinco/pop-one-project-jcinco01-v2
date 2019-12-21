@@ -17,6 +17,7 @@ def convert(num):
         return float("{0:.2f}".format(float(num)))
     except ValueError:
         print("Cannot convert non-numerical strings to float.")
+        raise
 
 
 def print_cities(road_map):
@@ -29,17 +30,21 @@ def print_cities(road_map):
 def compute_total_distance(road_map):
     """Returns, as a floating point number, the sum of the distances of all the connections in the road_map.
     Remember that it's a cycle, so that for example in the initial road_map above, Wyoming connects to Alabama..."""
-    if not road_map:
-        return None
-    else:
-        map_copy = [*road_map, road_map[0]]
-        total_distance = 0.0
-        for i in range(len(map_copy) - 1):
-            lats = float(map_copy[i][2]) - float(map_copy[i + 1][2])
-            longs = float(map_copy[i][3]) - float(map_copy[i + 1][3])
-            distance = math.sqrt(lats * lats + longs * longs)
-            total_distance += distance
-    return convert(total_distance)
+    try:
+        if not road_map:
+            return None
+        else:
+            map_copy = [*road_map, road_map[0]]
+            total_distance = 0.0
+            for i in range(len(map_copy) - 1):
+                lats = float(map_copy[i][2]) - float(map_copy[i + 1][2])
+                longs = float(map_copy[i][3]) - float(map_copy[i + 1][3])
+                distance = math.sqrt(lats * lats + longs * longs)
+                total_distance += distance
+        return convert(total_distance)
+    except TypeError as error:
+        print(error)
+        raise
 
 
 def swap_cities(road_map, index1, index2):
@@ -60,9 +65,12 @@ def swap_cities(road_map, index1, index2):
 def shift_cities(road_map):
     """For every index i in the road_map, the city at the position i moves to the position i+1.
     The city at the last position moves to the position 0. Return the the new road map."""
-    new_road_map = [road_map[-1]]
-    new_road_map.extend(road_map[:-1])
-    return new_road_map
+    try:
+        new_road_map = [road_map[-1]]
+        new_road_map.extend(road_map[:-1])
+        return new_road_map
+    except TypeError or None:
+        print("No road map provided.")
 
 
 def find_best_cycle(road_map):

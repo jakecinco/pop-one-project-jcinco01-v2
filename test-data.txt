@@ -1,5 +1,0 @@
-Pennsylvania	Harrisburg	40.269789	-76.875613
-Rhode Island	Providence	41.82355	-71.422132
-South Carolina	Columbia	34	-81.035
-South Dakota	Pierre	44.367966	-100.336378
-Tennessee	Nashville	36.165	-86.784

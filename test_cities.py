@@ -10,12 +10,16 @@ def test_compute_total_distance():
                  ('Nevada', 'Carson City', 39.160949, -119.753877),
                  ('New Hampshire', 'Concord', 43.220093, -71.549127),
                  ('New Jersey', 'Trenton', 40.221741, -74.756138)]
-    assert compute_total_distance(road_map1) == pytest.approx(9.386 + 18.496 + 10.646, 0.01)
-    assert compute_total_distance(road_map2) == pytest.approx(23.1373631 + 48.37535087 + 4.39033418 + 21.9270957, 0.01)
-
-
-def test_compute_total_distance_is_empty():
-    assert compute_total_distance(None) is None
+    try:
+        assert compute_total_distance(road_map1) == pytest.approx(9.386 + 18.496 + 10.646, 0.01)
+        assert compute_total_distance(road_map2) == pytest.approx(23.1373631 + 48.37535087 +
+                                                                  4.39033418 + 21.9270957, 0.01)
+        assert compute_total_distance(None) is None
+    except TypeError:
+        assert compute_total_distance(["London", 0, 0])
+        assert compute_total_distance([0])
+        assert compute_total_distance([["London", "England", "0", "0"]])
+        assert compute_total_distance()
 
 
 def test_swap_cities():
@@ -39,17 +43,26 @@ def test_shift_cities():
     road_map6 = [("Kentucky", "Frankfort", 38.197274, -84.86311),
                  ("Delaware", "Dover", 39.161921, -75.526755),
                  ("Minnesota", "Saint Paul", 44.95, -93.094)]
-    assert shift_cities(road_map5) == [('d', 4), ('a', 1), ('b', 2), ('c', 3)]
-    assert shift_cities(road_map6) == [("Minnesota", "Saint Paul", 44.95, -93.094),
-                                       ("Kentucky", "Frankfort", 38.197274, -84.86311),
-                                       ("Delaware", "Dover", 39.161921, -75.526755)]
+    try:
+        assert shift_cities(road_map5) == [('d', 4), ('a', 1), ('b', 2), ('c', 3)]
+        assert shift_cities(road_map6) == [("Minnesota", "Saint Paul", 44.95, -93.094),
+                                           ("Kentucky", "Frankfort", 38.197274, -84.86311),
+                                           ("Delaware", "Dover", 39.161921, -75.526755)]
+        assert shift_cities([('a', 1), ('b', 2)]) == [('b', 2), ('a', 1)]
+    except TypeError:
+        assert shift_cities()
+        assert shift_cities(["London", 0, 0])
 
 
 def test_convert():
-    assert convert('39.161921') == 39.16
-    assert convert('31.1') == 31.1
-    assert convert('20') == 20.0
-    assert convert('-90') == -90.0
-    assert convert(78) == 78.0
-    assert convert(53.123412) == 53.12
-    assert convert('Delaware') is None
+    try:
+        assert convert('39.161921') == 39.16
+        assert convert('31.1') == 31.1
+        assert convert('20') == 20.0
+        assert convert('-90') == -90.0
+        assert convert(78) == 78.0
+        assert convert(53.123412) == 53.12
+        assert convert('Delaware') is None
+    except ValueError:
+        assert convert(39)
+        assert convert(120.12)
