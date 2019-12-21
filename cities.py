@@ -1,17 +1,18 @@
-import copy
 import math
 import random
 import os.path
 
 
 def read_cities(file_name):
+    """Read in the cities from the given file_name, and return them as a list of four-tuples:"""
     with open(file_name, "r") as file:
         lines = file.read().splitlines()
         cities = [tuple(line.split("\t")) for line in lines]
         return cities
 
 
-def convert(num):  # Convert string to 2-decimal place float
+def convert(num):
+    """Convert string to 2-decimal place float"""
     try:
         return float("{0:.2f}".format(float(num)))
     except ValueError:
@@ -19,19 +20,19 @@ def convert(num):  # Convert string to 2-decimal place float
 
 
 def print_cities(road_map):
+    """Prints a list of cities, along with their locations. Print up to two digits after the decimal point."""
     road_map = read_cities(road_map)
     cities = [(city[0], city[1], convert(city[2]), convert(city[3])) for city in road_map]
-    for city in cities:
-        print(city)
-    # print([(city[1], convert(city[2]), convert(city[3])) for city in road_map]) # --> prints list of cities in 1 line
+    print(cities)
 
 
 def compute_total_distance(road_map):
+    """Returns, as a floating point number, the sum of the distances of all the connections in the road_map.
+    Remember that it's a cycle, so that for example in the initial road_map above, Wyoming connects to Alabama..."""
     if not road_map:
         return None
     else:
-        map_copy = [*road_map]
-        map_copy.append(road_map[0])
+        map_copy = [*road_map, road_map[0]]
         total_distance = 0.0
         for i in range(len(map_copy) - 1):
             lats = float(map_copy[i][2]) - float(map_copy[i + 1][2])
@@ -42,6 +43,8 @@ def compute_total_distance(road_map):
 
 
 def swap_cities(road_map, index1, index2):
+    """Take the city at location index in the road_map, and the city at location index2,
+    swap their positions in the road_map, compute the new total distance, and return the tuple"""
     try:
         map_copy = road_map[:]
         while index1 == index2:
@@ -55,12 +58,17 @@ def swap_cities(road_map, index1, index2):
 
 
 def shift_cities(road_map):
+    """For every index i in the road_map, the city at the position i moves to the position i+1.
+    The city at the last position moves to the position 0. Return the the new road map."""
     new_road_map = [road_map[-1]]
     new_road_map.extend(road_map[:-1])
     return new_road_map
 
 
 def find_best_cycle(road_map):
+    """Using a combination of swap_cities and shift_cities, try 10000 swaps/shifts, and each time keep
+    the best cycle found so far. After 10000 swaps/shifts, return the best cycle found so far.
+    Use randomly generated indices for swapping."""
     best_cycle_total = compute_total_distance(road_map)
     best_cycle = [*road_map]
     for i in range(10000):
@@ -75,17 +83,20 @@ def find_best_cycle(road_map):
 
 
 def print_map(road_map):
+    """Prints, in an easily understandable textual format, the cities and their connections, along with
+    the cost for each connection and the total cost."""
     map_copy = road_map[:]
     map_copy.append(road_map[0])
     for i in range(len(map_copy) - 1):
         cityA = map_copy[i]
         cityB = map_copy[i + 1]
         distance = math.sqrt((float(cityA[2]) - float(cityB[2])) ** 2 + (float(cityA[3]) - float(cityB[3])) ** 2)
-        print(f"{cityA[0]} -----> {cityB[0]} ===== {convert(distance)}")
-    print(f"Total distance: {convert(compute_total_distance(map_copy))}")
+        print(f"{cityA[0], cityA[1]} -----> {cityB[0], cityB[1]} ===== {convert(distance)}")
+    print(f"TOTAL DISTANCE: {convert(compute_total_distance(map_copy))}")
 
 
 def visualise(road_map):
+    """Use textual printing to visualise the map"""
     lats = [int(float(city[2])) for city in road_map]
     longs = [int(float(city[3]))for city in road_map]
     cities = [(city[0], int(float(city[2])), int(float(city[3]))) for city in road_map]
@@ -103,7 +114,6 @@ def visualise(road_map):
         else:
             print(i, end="  ")
         columns += "  |  "
-
     for j in range(max_lats, min_lats - 1, -1):
         print("\n", "   " + columns, end="")
         print("\n", j, end="")
@@ -113,31 +123,34 @@ def visualise(road_map):
                 if i == cities[x][2] and j == cities[x][1]:
                     sym = cities.index(cities[x]) + 1
             if len(str(i)) == 4 and sym is 0:
-                print(" - ", end=" ")
+                print(" - ", end="  ")
             elif len(str(i)) == 3 and sym is 0:
                 print(" - ", end="  ")
             elif len(str(i)) == 2 and sym is 0:
                 print(" - ", end="   ")
             else:
-                print(f" - {sym}", end="  ")
+                print(f" - {sym}", end="")
     print("\n" + "   ")
 
 
 def main():
+    """Requests to specify the file to load (make sure the file exists and valid), reads in
+    and prints out the city data, creates the "best" cycle, prints it out."""
     print("Type file name: ", end="")
     file = input()
     if os.path.isfile(file):
-        print("Initial road map")
+        print("INITIAL ROAD MAP:")
         print_cities(file)
-        print("\n""Initial road map connections")
+        print("\n""ROAD MAP CONNECTIONS:")
         print_map(read_cities(file))
-        print("\n""Best cycle")
+        print("\n""BEST CYCLE:")
         best_cycle = find_best_cycle(read_cities(file))
-        print(f"{best_cycle} \nBest total distance: {compute_total_distance(best_cycle)}")
+        print_map(best_cycle)
         print("\n")
-        print(visualise(best_cycle))
+        visualise(best_cycle)
     else:
-        print("Input file does not exist. Enter correct file name and ensure it is in the same directory as the project files.")
+        print("Input file does not exist. "
+              "Enter correct file name and ensure it is in the same directory as the project files.")
 
 
 if __name__ == "__main__":  # keep this in
