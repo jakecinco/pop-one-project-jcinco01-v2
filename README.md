@@ -1,3 +1,13 @@
+# Note to project markers or teachers
+- Ensure that your test txt file is in the same folder as project files (i.e. where cities.py is located)
+- Please run the program in a wide screen (to accommodate horizontal (x) axis/coordinates).  
+You can also zoom out your terminal. Otherwise, visual printing will not look correctly done.
+- Run program in terminal:
+    main:
+    `python3 -m cities`
+    test:
+    `python3 -m pytest -vv`
+
 # Traveling Salesman
 
 This coursework considers a simplified version of the travelling salesman problem.
