@@ -146,7 +146,7 @@ def main():
     and prints out the city data, creates the "best" cycle, prints it out."""
     print("Type file name: ", end="")
     file = input()
-    if os.path.isfile(file):
+    if os.path.isfile(file) and os.stat(file).st_size is not 0:
         print("INITIAL ROAD MAP:")
         print_cities(file)
         print("\n""ROAD MAP CONNECTIONS:")
@@ -157,7 +157,7 @@ def main():
         print("\n")
         visualise(best_cycle)
     else:
-        print("Input file does not exist. "
+        print("Input file does not exist or is empty. "
               "Enter correct file name and ensure it is in the same directory as the project files.")
 
 

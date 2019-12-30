@@ -10,6 +10,7 @@ def test_compute_total_distance():
                  ('Nevada', 'Carson City', 39.160949, -119.753877),
                  ('New Hampshire', 'Concord', 43.220093, -71.549127),
                  ('New Jersey', 'Trenton', 40.221741, -74.756138)]
+    road_map3 = []
     try:
         assert compute_total_distance(road_map1) == pytest.approx(9.386 + 18.496 + 10.646, 0.01)
         assert compute_total_distance(road_map2) == pytest.approx(23.1373631 + 48.37535087 +
@@ -20,9 +21,13 @@ def test_compute_total_distance():
         assert compute_total_distance([0])
         assert compute_total_distance([["London", "England", "0", "0"]])
         assert compute_total_distance()
+        assert compute_total_distance(road_map3)
 
 
 def test_swap_cities():
+    empty_road_map = []
+    incorrect_road_map = [("Delaware", 39.161921, -75.526755),
+                 ("Minnesota", 44.95, -93.094)]
     road_map3 = [("Delaware", "Dover", 39.161921, -75.526755),
                  ("Minnesota", "Saint Paul", 44.95, -93.094)]
     road_map3_swapped = [("Minnesota", "Saint Paul", 44.95, -93.094),
@@ -33,9 +38,14 @@ def test_swap_cities():
     road_map4_swapped = [("Minnesota", "Saint Paul", 44.95, -93.094),
                          ("Delaware", "Dover", 39.161921, -75.526755),
                          ("Kentucky", "Frankfort", 38.197274, -84.86311)]
-    assert swap_cities(road_map3, 0, 1) == (road_map3_swapped, compute_total_distance(road_map3_swapped))
-    assert swap_cities(road_map4, 0, 2) == (road_map4_swapped, compute_total_distance(road_map4_swapped))
-    assert swap_cities(road_map3, 1, 3) is None
+    try:
+        assert swap_cities(road_map3, 0, 1) == (road_map3_swapped, compute_total_distance(road_map3_swapped))
+        assert swap_cities(road_map4, 0, 2) == (road_map4_swapped, compute_total_distance(road_map4_swapped))
+        assert swap_cities(road_map3, 1, 3) is None
+    except TypeError:
+        assert swap_cities(empty_road_map)
+    except ValueError:
+        assert swap_cities(incorrect_road_map)
 
 
 def test_shift_cities():
